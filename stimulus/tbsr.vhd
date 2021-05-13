@@ -29,6 +29,7 @@ begin
     process begin
     wait for 200 ns;
 
+    -- data: 0xB1
     din <= '1';
     wait for 500 ns;
     
@@ -48,6 +49,31 @@ begin
     wait for 500 ns;
 
     din <= '0';
+    wait for 500 ns;
+
+    din <= '1';
+    wait for 500 ns;
+    
+    -- data : 0xF3
+    din <= '1';
+    wait for 500 ns;
+    
+    din <= '1';
+    wait for 500 ns;
+
+    din <= '1';
+    wait for 500 ns;
+
+    din <= '1';
+    wait for 500 ns;
+
+    din <= '0';
+    wait for 500 ns;
+
+    din <= '0';
+    wait for 500 ns;
+
+    din <= '1';
     wait for 500 ns;
 
     din <= '1';

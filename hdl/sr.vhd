@@ -11,17 +11,22 @@ end sr;
 
 architecture rtl of sr is
     signal   shReg   : std_logic_vector(7 downto 0) := (others => '0');
-
 begin
 
     process(clk)
-
+        variable rxCount : integer range 0 to 8 := 0;
     begin
-        if rising_edge(clk) then
-            shReg <= shReg(6 downto 0) & dataIn;
+
+        if (rxCount<8) then
+            if rising_edge(clk) then
+                shReg <= shReg(6 downto 0) & dataIn;
+                rxCount := rxCount + 1;
+            end if;
+        
+        else
+            rxCount := 0;
+            dataOut <= shReg;
         end if;
     end process;
-
-dataOut <= shReg;
 
 end rtl;
