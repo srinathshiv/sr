@@ -5,6 +5,7 @@ entity sr is
 port (
     clk     : in  std_logic;
     dataIn  : in  std_logic;
+    dataRdy : out std_logic;
     dataOut : out std_logic_vector(7 downto 0)
 );
 end sr;
@@ -19,13 +20,15 @@ begin
 
         if (rxCount<8) then
             if rising_edge(clk) then
-                shReg <= shReg(6 downto 0) & dataIn;
+                shReg   <= shReg(6 downto 0) & dataIn;
+                dataRdy <= '0';
                 rxCount := rxCount + 1;
             end if;
         
         else
-            rxCount := 0;
             dataOut <= shReg;
+            dataRdy <= '1';
+            rxCount := 0;
         end if;
     end process;
 

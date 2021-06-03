@@ -5,19 +5,19 @@ use ieee.std_logic_unsigned.all;
 
 entity fifo is
 generic(
-    addressWidth    : integer := 5 ;
+    addressWidth    : integer := 3 ;
     dataWidth       : integer := 8 ;
-    fifoLen         : integer := 32
+    fifoLen         : integer := 8
 );
 port(
     clk     : in  std_logic;
     rst     : in  std_logic;
 
     wren    : in  std_logic;
-    din     : in  std_logic_vector(7 downto 0);
+    din     : in  std_logic_vector(dataWidth-1 downto 0);
 
     rden    : in  std_logic;
-    dout    : out std_logic_vector(7 downto 0);
+    dout    : out std_logic_vector(dataWidth-1 downto 0);
 
     full    : out std_logic;
     empty   : out std_logic;
@@ -28,14 +28,14 @@ end entity;
 
 architecture rtl of fifo is
 
-    type registerFile is array ( 0 to ( (2**addressWidth)-1 )) of  std_logic_vector(7 downto 0);
+    type registerFile is array ( 0 to ( (2**addressWidth)-1 )) of  std_logic_vector(dataWidth-1 downto 0);
     signal mem          : registerFile;
 
-    signal readPtr      : std_logic_vector(4 downto 0);
-    signal readPtrNxt   : std_logic_vector(4 downto 0);
+    signal readPtr      : std_logic_vector(addressWidth-1 downto 0);
+    signal readPtrNxt   : std_logic_vector(addressWidth-1 downto 0);
 
-    signal writePtr     : std_logic_vector(4 downto 0);
-    signal writePtrNxt  : std_logic_vector(4 downto 0);
+    signal writePtr     : std_logic_vector(addressWidth-1 downto 0);
+    signal writePtrNxt  : std_logic_vector(addressWidth-1 downto 0);
 
     signal fullFlag     : std_logic;
     signal fullFlagNxt  : std_logic;
@@ -76,7 +76,7 @@ begin
 
         if(wren='1' and rden='0') then
             if(fullFlag = '0') then
-                if( conv_integer(writePtr) < fifoLen -1) then
+                if( conv_integer(writePtr) < (fifoLen-1) ) then
                     writePtrNxt  <= writePtr+1;
                     emptyFlagNxt <= '0';
                 else
@@ -92,7 +92,7 @@ begin
         
         if(wren='0' and rden='1') then
             if(emptyFlag='0') then
-                if(conv_integer(readPtr) < fifoLen-1) then
+                if(conv_integer(readPtr) < (fifoLen-1) ) then
                     readPtrNxt <= readPtr+1;
                     fullFlagNxt <= '0';
                 else
