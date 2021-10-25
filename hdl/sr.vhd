@@ -2,33 +2,47 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity sr is
+generic(
+    SRWIDTH   : integer := 8
+);
 port (
-    clk     : in  std_logic;
-    dataIn  : in  std_logic;
-    dataRdy : out std_logic;
-    dataOut : out std_logic_vector(7 downto 0)
+    reset     : in  std_logic;
+    clock     : in  std_logic;
+    enable    : in  std_logic;
+    dataIn    : in  std_logic;
+    dataReady : out std_logic;
+    dataOut   : out std_logic_vector(SRWIDTH-1 downto 0)
 );
 end sr;
 
 architecture rtl of sr is
-    signal   shReg   : std_logic_vector(7 downto 0) := (others => '0');
+    signal   shiftReg   : std_logic_vector(SRWIDTH-1 downto 0) := (others => '0');
 begin
 
-    process(clk)
-        variable rxCount : integer range 0 to 8 := 0;
+    process(clock, reset, enable)
+        variable rxCount : integer range 0 to SRWIDTH := 0;
     begin
+        if reset = '1' then
+            shiftReg   <= X"00";
+            dataReady  <= '0';
+            rxCount    :=  0 ;
 
-        if (rxCount<8) then
-            if rising_edge(clk) then
-                shReg   <= shReg(6 downto 0) & dataIn;
-                dataRdy <= '0';
-                rxCount := rxCount + 1;
+        elsif enable = '0' then
+            if (rxCount < SRWIDTH) then
+                if rising_edge(clock) then
+                    shiftReg <= shiftReg(SRWIDTH-2 downto 0) & dataIn;
+                    rxCount  := rxCount + 1;
+                end if;
+        
+            else
+                dataOut   <= shiftReg;
+                dataReady <= '1';
+                rxCount   := 0;
             end if;
         
         else
-            dataOut <= shReg;
-            dataRdy <= '1';
-            rxCount := 0;
+            dataReady <= '0';
+            rxCount   :=  0 ;
         end if;
     end process;
 
