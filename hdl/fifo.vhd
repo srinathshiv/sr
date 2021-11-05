@@ -22,8 +22,8 @@ use ieee.std_logic_unsigned.all;
 entity fifo is
     generic(
         FIFOWIDTH   : integer := 16;
-        FIFODEPTH   : integer := 64;
-        ADDRWIDTH   : integer := 6
+        FIFODEPTH   : integer := 8;
+        ADDRWIDTH   : integer := 3
     );
     port(
         clock      : in  std_logic;
@@ -49,8 +49,8 @@ architecture rtl of fifo is
     component ram is
         generic(
             RAMWIDTH  : integer := 16;
-            RAMDEPTH  : integer := 64;
-            RAMADDR   : integer := 6
+            RAMDEPTH  : integer := 8;
+            RAMADDR   : integer := 3
         );
         port(
             clock     : in  std_logic;
@@ -92,18 +92,20 @@ begin
             readPointer   <= (others => '0');
             writePointer  <= (others => '0');
             read_or_write <= '0';
+
+        elsif (writeEn='1') then
+            writePointer  <= writePointer + '1';
+            read_or_write <= '1';
         
         elsif (readEn='1' and empty='0') then
             readPointer   <= readPointer + '1';
             read_or_write <= '0';
 
-        elsif (writeEn='1' and full='0') then
-            writePointer  <= writePointer + '1';
-            read_or_write <= '1';
         end if;
     end if;
     end process;
     
+
     --Set full and empty flags based on read_or_write, readPointer and writePointer signals
     fullEmpty: process(readPointer, writePointer, read_or_write) 
     begin               
@@ -137,13 +139,13 @@ begin
 --            end if;
 
         elsif readEn='0' and writeEn='1' then
-            if full = '0' then
+--            if full = '0' then
                 RAM_writeEn <= '1';
 --                writeError <= '0';
-            else
-                RAM_writeEn     <= '0';
+--            else
+--                RAM_writeEn     <= '0';
 --                writeError <= '1';
-            end if;
+--            end if;
         
         elsif readEn='1' and writeEn='1' then
             if(empty = '0') then  -- When fifo's not empty, we simply read the data and updated read pointer value will be reflected on next raising edge
@@ -185,8 +187,8 @@ begin
 
     debugPort(31 downto 24) <= X"00";
     debugPort(23 downto 16) <= "0000000" & fifoWriteHappened;
-    debugPort(15 downto 8 ) <= "00" & writePointer;
-    debugPort( 7 downto 0 ) <= "00" & readPointer;
+    debugPort(15 downto 8 ) <= "00000" & writePointer;
+    debugPort( 7 downto 0 ) <= "00000" & readPointer;
 
 
 end rtl;

@@ -29,7 +29,11 @@ architecture rtl of tbspi is
         miso_dir    : out std_logic;
 
         --temp Signals
-        debugPort   : out std_logic_vector(31 downto 0)
+        debugPort   : out std_logic_vector(15 downto 0);
+        debugPortFlags1: out std_logic_vector(3 downto 0);
+        debugPortFlags2: out std_logic_vector(3 downto 0);
+        debugPortFlags3: out std_logic_vector(3 downto 0);
+        debugPortFlags4: out std_logic_vector(7 downto 0)
     );
     end component;
 
@@ -49,7 +53,11 @@ architecture rtl of tbspi is
     signal   tb_ncs_dir     : std_logic;
     signal   tb_mosi_dir    : std_logic;
     signal   tb_miso_dir    : std_logic;
-    signal   tb_debugPort   : std_logic_vector(31 downto 0);
+    signal   tb_debugPort   : std_logic_vector(15 downto 0);
+    signal   tb_debugPortFlags1: std_logic_vector(3 downto 0);
+    signal   tb_debugPortFlags2: std_logic_vector(3 downto 0);
+    signal   tb_debugPortFlags3: std_logic_vector(3 downto 0);
+    signal   tb_debugPortFlags4: std_logic_vector(7 downto 0);
 
 begin
 
@@ -70,7 +78,11 @@ begin
         ncs_dir     => tb_ncs_dir    ,
         mosi_dir    => tb_mosi_dir   ,
         miso_dir    => tb_miso_dir   ,
-        debugPort   => tb_debugPort  
+        debugPort   => tb_debugPort  ,
+        debugPortFlags1 => tb_debugPortFlags1,
+        debugPortFlags2 => tb_debugPortFlags2,
+        debugPortFlags3 => tb_debugPortFlags3,
+        debugPortFlags4 => tb_debugPortFlags4
     );
 
     process begin
@@ -93,9 +105,9 @@ begin
         wait for 1100 ns; --change data after 1000ns
         tb_ncs  <= '0';
 
-    
+----<<inputbegin
     --[2] Input data for spi at 1 Mhz
-        --[1Mhz] data: 0xB1
+--(1)   [1Mhz] data: 0xB1
         tb_mosi <= '1';
         wait for 1000 ns;
     
@@ -120,7 +132,7 @@ begin
         tb_mosi <= '1';
         wait for 1000 ns;
     
-        --[1Mhz] data : 0xF3
+--(2)   [1Mhz] data : 0xF3
         tb_mosi <= '1';
         wait for 1000 ns;
         
@@ -143,9 +155,432 @@ begin
         wait for 1000 ns;
 
         tb_mosi <= '1';
+        wait for 1000 ns;
+
+--(3)   [1Mhz] data: 0x11
+        tb_mosi <= '0';
+        wait for 1000 ns;
+    
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(4)   [1Mhz] data : 0x22
+        tb_mosi <= '0';
+        wait for 1000 ns;
+        
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(5)   [1Mhz] data: 0x33
+        tb_mosi <= '0';
+        wait for 1000 ns;
+    
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(6)   [1Mhz] data : 0x44
+        tb_mosi <= '0';
+        wait for 1000 ns;
+        
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(7)   [1Mhz] data: 0xCD
+        tb_mosi <= '1';
+        wait for 1000 ns;
+        
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+--(8)   [1Mhz] data: 0x37
+        tb_mosi <= '0';
+        wait for 1000 ns;
+        
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+--(9)   [1Mhz] data: 0x99
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(10)  [1Mhz] data : 0xAA
+        tb_mosi <= '1';
+        wait for 1000 ns;
+        
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(11)   [1Mhz] data: 0xBB
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(12)   [1Mhz] data : 0xCC
+        tb_mosi <= '1';
+        wait for 1000 ns;
+        
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(13)   [1Mhz] data: 0xDD
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(14)   [1Mhz] data : 0xEE
+        tb_mosi <= '1';
+        wait for 1000 ns;
+        
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(15)   [1Mhz] data: 0xFF
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+    
+--(16)   [1Mhz] data : 0x12
+        tb_mosi <= '0';
+        wait for 1000 ns;
+        
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+--(17)   [1Mhz] data: 0x56
+        tb_mosi <= '0';
+        wait for 1000 ns;
+    
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+    
+--(18)   [1Mhz] data : 0x34
+        tb_mosi <= '0';
+        wait for 1000 ns;
+        
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '1';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+        tb_mosi <= '0';
+        wait for 1000 ns;
+
+
+----<<inputend
+
+    --[3] Read fifo
+        --[200Mhz]
+        -- issue read
+        tb_REG_control <= X"0100";
+        wait for 5 ns;
+
+        --issue read
+        wait for 40 ns;
+
+        --issue read
+        --wait for 5 ns;
+
+        --issue read
+        --wait for 5 ns;
+
+        --stop read
+        tb_REG_control <= X"0000";
+        wait for 5 ns;
         
         
-    --[3] Termination conditions for a smooth rollover
+    --[4] Termination conditions for a smooth rollover
         -- [200Mhz]
         wait for 4.5 ns;
         -- [1Mhz]
